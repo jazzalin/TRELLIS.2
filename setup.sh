@@ -66,8 +66,30 @@ else
     exit 1
 fi
 
+# Set CUDA_HOME if not already set (for CUDA platform)
+if [ "$PLATFORM" = "cuda" ] ; then
+    if [ -z "$CUDA_HOME" ]; then
+        # Try to find CUDA installation
+        if [ -d "/usr/local/cuda-12.4" ]; then
+            export CUDA_HOME=/usr/local/cuda-12.4
+            echo "[INFO] CUDA_HOME not set, using: $CUDA_HOME"
+        elif [ -d "/usr/local/cuda" ]; then
+            export CUDA_HOME=/usr/local/cuda
+            echo "[INFO] CUDA_HOME not set, using: $CUDA_HOME"
+        else
+            echo "[WARNING] CUDA_HOME not set and could not auto-detect CUDA installation."
+            echo "[WARNING] If compilation fails, please set CUDA_HOME manually before running this script."
+            echo "[WARNING] Example: export CUDA_HOME=/usr/local/cuda-12.4"
+        fi
+    else
+        echo "[INFO] Using CUDA_HOME: $CUDA_HOME"
+    fi
+fi
+
 if [ "$NEW_ENV" = true ] ; then
+    conda tos accept
     conda create -n trellis2 python=3.10
+    source activate base
     conda activate trellis2
     if [ "$PLATFORM" = "cuda" ] ; then
         pip install torch==2.6.0 torchvision==0.21.0 --index-url https://download.pytorch.org/whl/cu124
@@ -79,14 +101,15 @@ fi
 if [ "$BASIC" = true ] ; then
     pip install imageio imageio-ffmpeg tqdm easydict opencv-python-headless ninja trimesh transformers gradio==6.0.1 tensorboard pandas lpips zstandard
     pip install git+https://github.com/EasternJournalist/utils3d.git@9a4eb15e4021b67b12c460c7057d642626897ec8
-    sudo apt install -y libjpeg-dev
+    apt install -y libjpeg-dev
     pip install pillow-simd
     pip install kornia timm
 fi
 
 if [ "$FLASHATTN" = true ] ; then
     if [ "$PLATFORM" = "cuda" ] ; then
-        pip install flash-attn==2.7.3
+        pip install psutil
+        pip install flash-attn==2.7.3 --no-build-isolation
     elif [ "$PLATFORM" = "hip" ] ; then
         echo "[FLASHATTN] Prebuilt binaries not found. Building from source..."
         mkdir -p /tmp/extensions

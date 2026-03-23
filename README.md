@@ -99,6 +99,20 @@ Data processing is streamlined for instant conversions that are fully **renderin
         --nvdiffrec             Install nvdiffrec
     ```
 
+## Containerization
+
+### Build
+
+Build Docker image first (**WARNING**: high memory usage, large output image ~40 GB):
+```sh
+DOCKER_BUILDKIT=0 docker build -t trellis2 -f Dockerfile .
+```
+
+Build Apptainer image second (**WARNING**: large disk space usage during build):
+```sh
+apptainer build trellis2.sif docker-daemon://trellis2:latest
+```
+
 ## 📦 Pretrained Weights
 
 The pretrained model **TRELLIS.2-4B** is available on Hugging Face. Please refer to the model card there for more details.
