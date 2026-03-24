@@ -208,3 +208,8 @@ __marimo__/
 
 # Apptainer
 *.sif
+
+# Pre-trained models
+facebook/
+microsoft/
+briaai/

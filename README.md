@@ -121,6 +121,17 @@ The pretrained model **TRELLIS.2-4B** is available on Hugging Face. Please refer
 | :--- | :--- | :--- | :--- |
 | **TRELLIS.2-4B** | 4 Billion | 512³ - 1536³ | [Hugging Face](https://huggingface.co/microsoft/TRELLIS.2-4B) |
 
+### Gated models
+
+In addition, TRELLIS.2 depends on two gated models available on Huggingface:
+- [DINOv3](https://huggingface.co/facebook/dinov3-vitl16-pretrain-lvd1689m)
+- [RMBG-2.0](https://huggingface.co/briaai/RMBG-2.0)
+
+Access to the latter can easily be done via the HF interface (from which it is then possible to download the pretrained model with a WRITE access token).
+
+For DINOv3, it is easier to go through Meta's [access request page](https://ai.meta.com/resources/models-and-libraries/dinov3-downloads/). They will send an email with the download link for the model needed to run TRELLIS.2.
+
+However, the model weights (`.pth`) need to be converted to the `.safetensor` format used on HF. A `convert.py` script was added to do this.
 
 ## 🚀 Usage
 
