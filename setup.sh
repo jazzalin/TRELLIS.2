@@ -112,9 +112,9 @@ if [ "$FLASHATTN" = true ] ; then
         pip install flash-attn==2.7.3 --no-build-isolation
     elif [ "$PLATFORM" = "hip" ] ; then
         echo "[FLASHATTN] Prebuilt binaries not found. Building from source..."
-        mkdir -p /tmp/extensions
-        git clone --recursive https://github.com/ROCm/flash-attention.git /tmp/extensions/flash-attention
-        cd /tmp/extensions/flash-attention
+        mkdir -p ./extensions
+        git clone --recursive https://github.com/ROCm/flash-attention.git ./extensions/flash-attention
+        cd ./extensions/flash-attention
         git checkout tags/v2.7.3-cktile
         GPU_ARCHS=gfx942 python setup.py install #MI300 series
         cd $WORKDIR
@@ -125,9 +125,9 @@ fi
 
 if [ "$NVDIFFRAST" = true ] ; then
     if [ "$PLATFORM" = "cuda" ] ; then
-        mkdir -p /tmp/extensions
-        git clone -b v0.4.0 https://github.com/NVlabs/nvdiffrast.git /tmp/extensions/nvdiffrast
-        pip install /tmp/extensions/nvdiffrast --no-build-isolation
+        mkdir -p ./extensions
+        git clone -b v0.4.0 https://github.com/NVlabs/nvdiffrast.git ./extensions/nvdiffrast
+        pip install ./extensions/nvdiffrast --no-build-isolation
     else
         echo "[NVDIFFRAST] Unsupported platform: $PLATFORM"
     fi
@@ -135,28 +135,28 @@ fi
 
 if [ "$NVDIFFREC" = true ] ; then
     if [ "$PLATFORM" = "cuda" ] ; then
-        mkdir -p /tmp/extensions
-        git clone -b renderutils https://github.com/JeffreyXiang/nvdiffrec.git /tmp/extensions/nvdiffrec
-        pip install /tmp/extensions/nvdiffrec --no-build-isolation
+        mkdir -p ./extensions
+        git clone -b renderutils https://github.com/JeffreyXiang/nvdiffrec.git ./extensions/nvdiffrec
+        pip install ./extensions/nvdiffrec --no-build-isolation
     else
         echo "[NVDIFFREC] Unsupported platform: $PLATFORM"
     fi
 fi
 
 if [ "$CUMESH" = true ] ; then
-    mkdir -p /tmp/extensions
-    git clone https://github.com/JeffreyXiang/CuMesh.git /tmp/extensions/CuMesh --recursive
-    pip install /tmp/extensions/CuMesh --no-build-isolation
+    mkdir -p ./extensions
+    git clone https://github.com/JeffreyXiang/CuMesh.git ./extensions/CuMesh --recursive
+    pip install ./extensions/CuMesh --no-build-isolation
 fi
 
 if [ "$FLEXGEMM" = true ] ; then
-    mkdir -p /tmp/extensions
-    git clone https://github.com/JeffreyXiang/FlexGEMM.git /tmp/extensions/FlexGEMM --recursive
-    pip install /tmp/extensions/FlexGEMM --no-build-isolation
+    mkdir -p ./extensions
+    git clone https://github.com/JeffreyXiang/FlexGEMM.git ./extensions/FlexGEMM --recursive
+    pip install ./extensions/FlexGEMM --no-build-isolation
 fi
 
 if [ "$OVOXEL" = true ] ; then
-    mkdir -p /tmp/extensions
-    cp -r o-voxel /tmp/extensions/o-voxel
-    pip install /tmp/extensions/o-voxel --no-build-isolation
+    mkdir -p ./extensions
+    cp -r o-voxel ./extensions/o-voxel
+    pip install ./extensions/o-voxel --no-build-isolation
 fi
