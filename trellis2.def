@@ -1,0 +1,26 @@
+Bootstrap: docker
+From: nvcr.io/nvidia/pytorch:24.04-py3
+
+%environment
+  export PATH="/opt/conda/bin:$PATH"
+
+%files
+  . /workspace/
+
+%post
+  apt-get -y update
+  apt-get -y install wget libgl1 libwebp-dev
+  wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /miniconda.sh
+  bash /miniconda.sh -b -p /opt/conda
+  rm /miniconda.sh
+  rm -rf /var/lib/apt/lists/*
+
+  cd /workspace
+  export PATH="/opt/conda/bin:$PATH"
+  bash ./setup.sh --new-env --basic --flash-attn --nvdiffrast --nvdiffrec --cumesh --o-voxel --flexgemm
+  
+
+%runscript
+  cd /workspace
+  source activate
+  conda activate trellis2

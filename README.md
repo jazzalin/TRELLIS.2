@@ -113,6 +113,11 @@ Build Apptainer image second (**WARNING**: large disk space usage during build):
 apptainer build trellis2.sif docker-daemon://trellis2:latest
 ```
 
+Alternatively, build the Apptainer image directly:
+```sh
+apptainer build --nv --nvccli trellis2.sif trellis2.def
+```
+
 ## 📦 Pretrained Weights
 
 The pretrained model **TRELLIS.2-4B** is available on Hugging Face. Please refer to the model card there for more details.
