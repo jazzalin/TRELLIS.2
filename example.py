@@ -17,7 +17,7 @@ envmap = EnvMap(torch.tensor(
 ))
 
 # 2. Load Pipeline
-pipeline = Trellis2ImageTo3DPipeline.from_pretrained("microsoft/TRELLIS.2-4B")
+pipeline = Trellis2ImageTo3DPipeline(default_pipeline_type="512").from_pretrained("microsoft/TRELLIS.2-4B")
 pipeline.cuda()
 
 # 3. Load Image & Run

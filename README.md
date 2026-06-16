@@ -203,6 +203,14 @@ Upon execution, the script generates the following files:
 
 **Note:** The `.glb` file is exported in `OPAQUE` mode by default. Although the alpha channel is preserved within the texture map, it is not active initially. To enable transparency, import the asset into your 3D software and manually connect the texture's alpha channel to the material's opacity or alpha input.
 
+#### Speed-up recommendations
+
+A list of recommendations (by Claude) to speed up generation (speed over quality):
+
+1. Set resolution to `512`, either by passing `default_pipeline_type="512"` to `Trellis2ImageTo3DPipeline` or by passing `resolution=512` to `render_utils.render_snapshot`
+2. Reduce sampling steps at all diffusion stages (default: 12): `ss_sampling_steps=4`, `shape_slat_sampling_steps=4`, `tex_slat_sampling_steps=4`
+3. Reduce quality of GLB export, including disabling remeshing: `decimation_target=200000`, `texture_size=1024`, `remesh=False`
+
 #### Web Demo
 
 [app.py](app.py) provides a simple web demo for image to 3D asset generation. you can run the demo with the following command:

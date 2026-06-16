@@ -399,7 +399,7 @@ def image_to_3d(
     )
     mesh = outputs[0]
     mesh.simplify(16777216) # nvdiffrast limit
-    images = render_utils.render_snapshot(mesh, resolution=1024, r=2, fov=36, nviews=STEPS, envmap=envmap)
+    images = render_utils.render_snapshot(mesh, resolution=512, r=2, fov=36, nviews=STEPS, envmap=envmap)
     state = pack_state(latents)
     torch.cuda.empty_cache()
     
@@ -500,10 +500,11 @@ def extract_glb(
         aabb=[[-0.5, -0.5, -0.5], [0.5, 0.5, 0.5]],
         decimation_target=decimation_target,
         texture_size=texture_size,
-        remesh=True,
+        remesh=False,
         remesh_band=1,
         remesh_project=0,
         use_tqdm=True,
+        verbose=False
     )
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%dT%H%M%S") + f".{now.microsecond // 1000:03d}"
@@ -525,11 +526,11 @@ with gr.Blocks(delete_cache=(600, 600)) as demo:
         with gr.Column(scale=1, min_width=360):
             image_prompt = gr.Image(label="Image Prompt", format="png", image_mode="RGBA", type="pil", height=400)
             
-            resolution = gr.Radio(["512", "1024", "1536"], label="Resolution", value="1024")
+            resolution = gr.Radio(["512", "1024", "1536"], label="Resolution", value="512")
             seed = gr.Slider(0, MAX_SEED, label="Seed", value=0, step=1)
             randomize_seed = gr.Checkbox(label="Randomize Seed", value=True)
-            decimation_target = gr.Slider(100000, 1000000, label="Decimation Target", value=500000, step=10000)
-            texture_size = gr.Slider(1024, 4096, label="Texture Size", value=2048, step=1024)
+            decimation_target = gr.Slider(100000, 1000000, label="Decimation Target", value=200000, step=10000)
+            texture_size = gr.Slider(1024, 4096, label="Texture Size", value=1024, step=1024)
             
             generate_btn = gr.Button("Generate")
                 
@@ -538,19 +539,19 @@ with gr.Blocks(delete_cache=(600, 600)) as demo:
                 with gr.Row():
                     ss_guidance_strength = gr.Slider(1.0, 10.0, label="Guidance Strength", value=7.5, step=0.1)
                     ss_guidance_rescale = gr.Slider(0.0, 1.0, label="Guidance Rescale", value=0.7, step=0.01)
-                    ss_sampling_steps = gr.Slider(1, 50, label="Sampling Steps", value=12, step=1)
+                    ss_sampling_steps = gr.Slider(1, 50, label="Sampling Steps", value=4, step=1)
                     ss_rescale_t = gr.Slider(1.0, 6.0, label="Rescale T", value=5.0, step=0.1)
                 gr.Markdown("Stage 2: Shape Generation")
                 with gr.Row():
                     shape_slat_guidance_strength = gr.Slider(1.0, 10.0, label="Guidance Strength", value=7.5, step=0.1)
                     shape_slat_guidance_rescale = gr.Slider(0.0, 1.0, label="Guidance Rescale", value=0.5, step=0.01)
-                    shape_slat_sampling_steps = gr.Slider(1, 50, label="Sampling Steps", value=12, step=1)
+                    shape_slat_sampling_steps = gr.Slider(1, 50, label="Sampling Steps", value=4, step=1)
                     shape_slat_rescale_t = gr.Slider(1.0, 6.0, label="Rescale T", value=3.0, step=0.1)
                 gr.Markdown("Stage 3: Material Generation")
                 with gr.Row():
                     tex_slat_guidance_strength = gr.Slider(1.0, 10.0, label="Guidance Strength", value=1.0, step=0.1)
                     tex_slat_guidance_rescale = gr.Slider(0.0, 1.0, label="Guidance Rescale", value=0.0, step=0.01)
-                    tex_slat_sampling_steps = gr.Slider(1, 50, label="Sampling Steps", value=12, step=1)
+                    tex_slat_sampling_steps = gr.Slider(1, 50, label="Sampling Steps", value=4, step=1)
                     tex_slat_rescale_t = gr.Slider(1.0, 6.0, label="Rescale T", value=3.0, step=0.1)                
 
         with gr.Column(scale=10):
