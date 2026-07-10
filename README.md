@@ -136,7 +136,7 @@ Access to the latter can easily be done via the HF interface (from which it is t
 
 For DINOv3, it is easier to go through Meta's [access request page](https://ai.meta.com/resources/models-and-libraries/dinov3-downloads/). They will send an email with the download link for the model needed to run TRELLIS.2.
 
-However, the model weights (`.pth`) need to be converted to the `.safetensor` format used on HF. A `convert.py` script was added to do this.
+However, the model weights (`.pth`) need to be converted to the `.safetensor` format used on HF. The [`convert.py`](./trellis2/utils/convert.py) script was added to do this.
 
 ## 🚀 Usage
 
@@ -219,6 +219,27 @@ python app.py
 ```
 
 Then, you can access the demo at the address shown in the terminal.
+
+#### Running the web demo on Chacha/Disco
+
+Start a remote session on the HPC using local port forwarding to be able to open the web app on your local machine:
+```bash
+ssh -L 7860:localhost:7860 chacha
+```
+
+Make sure the entrypoint script can be executed by the apptainer exec command:
+```bash
+chmod +x entrypoint.sh
+```
+
+Run the `sbatch` script to submit a Slurm job that will run the backend:
+```bash
+sbatch trellis_sbatch.sh
+```
+
+> **N.B.**:
+>- the bind paths in [`trellis_sbatch.sh`](./trellis_sbatch.sh) need to be updated to match your session.
+>- instead of downloading the pre-trained weights and having to rebuild the trellis2.sif image, you can request them from us
 
 ### 2. PBR Texture Generation
 
